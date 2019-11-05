@@ -2,24 +2,28 @@ import pandas as pd
 import spotipy
 import oAuth_spotify
 from spotipy.oauth2 import SpotifyClientCredentials
-import os
 import json
-from json.decoder import JSONDecodeError
 import sys
 
+# Authorizing with spotify API credentials
+# Client_ID and Client_Secret = "Get-your-client-id-from-spotify-developer-website"
 client_credentials_manager = SpotifyClientCredentials(oAuth_spotify.Client_ID,oAuth_spotify.Client_Secret)
 
+#Creating a Spotipy object, we use this to get all the data we need
 sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 
+#We are collecting Data about the playlists created by Spotify itself
 username = 'Spotify'
 
-'''playlists = sp.user_playlists(username,limit = 1)
-a = json.dumps(playlists['items'],indent=4)
-print(a)'''
+''' 
+Writing a loop for extracting data and saving it in a file for every 1000 records
+File name = Playlist_{start}_{end}.json 
+'''
 
 end = 1000
 start = 0
 total = 10000
+
 while end <= total:
 
     for offs in range(start,end,50):
