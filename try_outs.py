@@ -16,40 +16,44 @@ sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 username = 'Spotify'
 
 ''' 
-Writing a loop for extracting data and saving it in a file for every 1000 records
+Writing a function for extracting data and saving it in a file for every 1000 records
 File name = Playlist_{start}_{end}.json 
 '''
 
-end = 1000
-start = 0
-total = 10000
+def get_playlists(start,end,total):
+    while end <= total:
 
-while end <= total:
+        for offs in range(start,end,50):
+            if offs == start:
+                playlists = sp.user_playlists(username,limit = 50)
+                a = json.dumps(playlists['items'],indent=4)
+            else:   
+                playlists = sp.user_playlists(username,offset = offs,limit = 1)
+                a = a + json.dumps(playlists['items'],indent=4)
 
-    for offs in range(start,end,50):
-        if offs == start:
-            playlists = sp.user_playlists(username,limit = 50)
-            a = json.dumps(playlists['items'],indent=4)
-        else:   
-            playlists = sp.user_playlists(username,offset = offs,limit = 1)
-            a = a + json.dumps(playlists['items'],indent=4)
+        file_name = 'playlist'+'_'+str(start)+'_'+str(end-1)+'.json'
 
-    file_name = 'playlist'+'_'+str(start)+'_'+str(end-1)+'.json'
+        with open(file_name,'w') as f:
+            f.write(a.replace('][',','))
+        
+        bar_len = 100
+        perc = int(end/total*100)
+        bar = "="*perc + '-'*(bar_len-perc)
+        sys.stdout.write("[%s] %d%% \r" % (bar,perc))
+        sys.stdout.flush()
 
-    with open(file_name,'w') as f:
-        f.write(a.replace('][',','))
-    
-    bar_len = 100
-    perc = int(end/total*100)
-    bar = "="*perc + '-'*(bar_len-perc)
-    sys.stdout.write("[%s] %d%% \r" % (bar,perc))
-    sys.stdout.flush()
+        end = end + 1000
+        start = start + 1000
 
-    end = end + 1000
-    start = start + 1000
+    print('\n ------END------')
 
-print('------END------')
+# Call the function with the start,end and Total records needed.
 
+end = 21000
+start = 20000
+total = 30000
+
+get_playlists(start,end,total)
 
 
 
