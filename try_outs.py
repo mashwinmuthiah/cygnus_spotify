@@ -10,11 +10,26 @@ import spotipy.util as util
 client_credentials_manager = SpotifyClientCredentials(oAuth_spotify.Client_ID,oAuth_spotify.Client_Secret)
 
 sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
-username = 'spotify'
-playlists = sp.user_playlists(username,limit = 3)
+username = 'Spotify'
 
+playlists = sp.user_playlists(username)
 
-print(json.dumps(playlists,indent=4))
+'''for offs in range(0,101,50):
+    playlists = sp.user_playlists(username,offset = offs,limit = 50)
+    print(json.dumps(playlists,indent=4))
+'''
+
+for offs in range(0,501,50):
+    with open('playlist.json','a+') as f:
+        playlists = sp.user_playlists(username,offset = offs,limit = 50)
+        json.dump(playlists['items'],f,indent=4)
+        
+
+with open('playlist.json','r+') as a:
+    content = a.read()
+    a.seek(0)
+    content.replace('][',',')
+    a.write(content)
 
 print('------END------')
 
