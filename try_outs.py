@@ -22,14 +22,8 @@ playlists = sp.user_playlists(username)
 for offs in range(0,501,50):
     with open('playlist.json','a+') as f:
         playlists = sp.user_playlists(username,offset = offs,limit = 50)
-        json.dump(playlists['items'],f,indent=4)
+        json.dump(playlists['items'],f,indent=4,sort_keys=True)
         
-
-with open('playlist.json','r+') as a:
-    content = a.read()
-    a.seek(0)
-    content.replace('][',',')
-    a.write(content)
 
 print('------END------')
 
