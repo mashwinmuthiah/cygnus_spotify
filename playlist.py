@@ -53,7 +53,30 @@ end = 21000
 start = 20000
 total = 30000
 
-get_playlists(start,end,total)
+## get_playlists(start,end,total)
+
+''' Making a list of playlists ID '''
+
+def make_playlist_list(start,end):
+    P_list = []
+    while end<=30000:
+        print(start,end)
+        url = r'C:\Users\ashwi\Desktop\Ashwin\cygnus_spotify\Data\playlist_'+str(start)+'_'+str(end-1)+'.json'
+        with open(url) as f:
+            data = json.load(f)
+            for j in data:
+                P_list.append(j['id'])
+
+        start = start + 1000
+        end = end + 1000
+
+    print(len(P_list))
+
+start = 0
+end = 1000
+make_playlist_list(start,end)        
+
+
 
 
 

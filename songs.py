@@ -24,5 +24,7 @@ tracks = sp.user_playlist_tracks(user = username , playlist_id= pl_id,limit=2)['
 with open('song_try.json','w') as f:
     json.dump(tracks,f,indent=4)
 
+print('-------END------')
+
 
 
