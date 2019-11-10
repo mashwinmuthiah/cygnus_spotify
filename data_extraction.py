@@ -15,7 +15,9 @@ sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 #We are collecting Data about the playlists created by Spotify itself
 username = 'Spotify'
 
-''' 
+'''
+Getting Playlist Details
+
 Writing a function for extracting data and saving it in a file for every 1000 records
 File name = Playlist_{start}_{end}.json 
 '''
@@ -72,9 +74,16 @@ def make_playlist_list(start,end):
 
     print(len(P_list))
 
+    return P_list
+
 start = 0
 end = 1000
-make_playlist_list(start,end)        
+P_list = make_playlist_list(start,end)        
+
+''' Getting the songs using the P_list and the API '''
+
+
+
 
 
 
