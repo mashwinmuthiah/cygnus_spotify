@@ -1,13 +1,19 @@
 import pandas as pd
-import spotipy
 import oAuth_spotify
-from spotipy.oauth2 import SpotifyClientCredentials
 import json
 import sys
 import pickle
 import os
+import requests
 
+grant_type = 'client_credentials'
+body_params = {'grant_type' : grant_type}
+url='https://accounts.spotify.com/api/token'
+response = requests.post(url, data=body_params, auth = (oAuth_spotify.Client_ID,oAuth_spotify.Client_Secret)) 
+token_raw = json.loads(response.text)
+token = token_raw["access_token"]
 
-with open('playlist_id.txt',"rb") as fp:
-    b = pickle.load(fp)
-print(len(b))
+headers = {"Authorization": "Bearer {}".format(token)}
+url="https://api.spotify.com/v1/users/ashwinmuthiah/playlists"
+r = requests.get(url, headers=headers)
+print(r.text)
