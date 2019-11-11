@@ -3,6 +3,7 @@ import spotipy
 import oAuth_spotify
 from spotipy.oauth2 import SpotifyClientCredentials
 import json
+import os
 import sys
 import pickle
 
@@ -18,14 +19,20 @@ username = 'Spotify'
 
 
 def make_playlist_list(start,end):
-    lst = []
+    if os.path.exists('playlist_id.txt'):
+        with open("playlist_id.txt", "rb") as fp: 
+            old_data = pickle.load(fp)
+    else : old_data = []
+
+    lst = old_data
+
     for i in range(start, end, 50):
         a = sp.user_playlists("Spotify", limit=50, offset=i)
         playlist_id = (a['items'])
         for j in range(0,len(playlist_id)):
             x = playlist_id[j]['id']
+            print(x)
             lst.append(x)
-
     with open("playlist_id.txt", "wb") as fp:   #Pickling
         pickle.dump(lst, fp)
     
@@ -34,8 +41,8 @@ def make_playlist_list(start,end):
 
 
 start = 0
-end = 10000
-#make_playlist_list(start,end)        
+end = 2000
+make_playlist_list(start,end)        
 
 def track_ids():
     with open("playlist_id.txt", "rb") as fp:   # Unpickling and getting the List of Playlist id's
@@ -55,15 +62,15 @@ def track_ids():
         pickle.dump(tracks_id,fp)
     del tracks_id,b
 
-#track_ids()
+track_ids()
 
 
 def get_songs_details():
 
     with open('track_id.txt',"rb") as fp:
         b = pickle.load(fp)
-    print('Number of Songs id extracted : ',len(set(b)))
+    print('Number of unique Songs id extracted : ',len(set(b)))
 
-#get_songs_details()
+get_songs_details()
 
 
