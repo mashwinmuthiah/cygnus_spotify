@@ -28,12 +28,13 @@ def make_playlist_list(start,end):
 
     with open("playlist_id.txt", "wb") as fp:   #Pickling
         pickle.dump(lst, fp)
-
+    
     print('Number of Playlists id extracted :',len(lst))
+    del lst
+
 
 start = 0
 end = 10000
-
 #make_playlist_list(start,end)        
 
 def track_ids():
@@ -52,14 +53,17 @@ def track_ids():
 
     with open('track_id.txt',"wb") as fp:
         pickle.dump(tracks_id,fp)
-
+    del tracks_id,b
 
 #track_ids()
 
 
-with open('track_id.txt',"rb") as fp:
-    b = pickle.load(fp)
-print('Number of Songs id extracted : ',len(b))
+def get_songs_details():
 
+    with open('track_id.txt',"rb") as fp:
+        b = pickle.load(fp)
+    print('Number of Songs id extracted : ',len(set(b)))
+
+#get_songs_details()
 
 
