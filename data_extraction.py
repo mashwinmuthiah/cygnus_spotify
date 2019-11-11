@@ -98,7 +98,7 @@ def track_ids():
     tracks_id = []
     for progress,i in enumerate(b):
         tracks = sp.user_playlist_tracks(username, playlist_id=i, limit=100)
-        a = json.dumps(tracks,indent=4)
+        ## a = json.dumps(tracks,indent=4)
 
         for item in tracks['items']:
                 if item['track'] is not None:
