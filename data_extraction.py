@@ -4,9 +4,10 @@ import oAuth_spotify
 from spotipy.oauth2 import SpotifyClientCredentials
 import json
 import sys
+import pickle
 
 # Authorizing with spotify API credentials
-# Client_ID and Client_Secret = "Get-your-client-id-from-spotify-developer-website"
+# Client_ID and Client_Secret = "Get-your-client-id-from-spotify-developer-website" 
 client_credentials_manager = SpotifyClientCredentials(oAuth_spotify.Client_ID,oAuth_spotify.Client_Secret)
 
 #Creating a Spotipy object, we use this to get all the data we need
@@ -62,7 +63,7 @@ total = 30000
 def make_playlist_list(start,end):
     P_list = []
     while end<=30000:
-        print(start,end)
+        # print(start,end)
         url = r'C:\Users\ashwi\Desktop\Ashwin\cygnus_spotify\Data\playlist_'+str(start)+'_'+str(end-1)+'.json'
         with open(url) as f:
             data = json.load(f)
@@ -72,20 +73,47 @@ def make_playlist_list(start,end):
         start = start + 1000
         end = end + 1000
 
-    print(len(P_list))
+    with open("playlist_id.txt", "wb") as fp:   #Pickling
+        pickle.dump(P_list, fp)
 
-    return P_list
+    print('Number of Playlists id extracted :',len(P_list))
+    # return P_list
 
 start = 0
 end = 1000
-P_list = make_playlist_list(start,end)        
+
+''' Just call the below function once , the list will be pickled in a file and then can be read using pickle.load method '''
+make_playlist_list(start,end)        
 
 ''' Getting the songs using the P_list and the API '''
 
+with open("playlist_id.txt", "rb") as fp:   # Unpickling and getting the List of Playlist id's
+    b = pickle.load(fp)
 
 
 
 
+def track_ids():
+
+    tracks_id = []
+    for progress,i in enumerate(b):
+        tracks = sp.user_playlist_tracks(username, playlist_id=i, limit=100)
+        a = json.dumps(tracks,indent=4)
+
+        for item in tracks['items']:
+                if item['track'] is not None:
+                    tracks_id.append(item['track']['id'])
+                else :
+                    print('Not Found in {}'.format(progress))
+    print('Number of Track Id Extracted {}'.format(len(tracks_id)))
+
+    with open('track_id.txt',"wb") as fp:
+        pickle.dump(track_ids,fp)
+
+
+''' Call the below function once, and it will create a file names track_id.txt  and we can read it '''
+
+track_ids()
 
 
 
